@@ -1,0 +1,626 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "p9t_oqlMaYSC"
+      },
+      "source": [
+        "## Basic Installations and imports"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "YuTIQlEXZmKB",
+        "outputId": "1fa2d344-558b-41e7-fbde-fc9e2cca7f94"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting openai\n",
+            "  Downloading openai-0.28.1-py3-none-any.whl (76 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m77.0/77.0 kB\u001b[0m \u001b[31m2.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: requests>=2.20 in /usr/local/lib/python3.10/dist-packages (from openai) (2.31.0)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from openai) (4.66.1)\n",
+            "Requirement already satisfied: aiohttp in /usr/local/lib/python3.10/dist-packages (from openai) (3.8.5)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai) (3.3.0)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai) (3.4)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai) (2.0.6)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai) (2023.7.22)\n",
+            "Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (23.1.0)\n",
+            "Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (6.0.4)\n",
+            "Requirement already satisfied: async-timeout<5.0,>=4.0.0a3 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (4.0.3)\n",
+            "Requirement already satisfied: yarl<2.0,>=1.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (1.9.2)\n",
+            "Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (1.4.0)\n",
+            "Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai) (1.3.1)\n",
+            "Installing collected packages: openai\n",
+            "Successfully installed openai-0.28.1\n",
+            "Collecting tiktoken\n",
+            "  Downloading tiktoken-0.5.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.0 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m2.0/2.0 MB\u001b[0m \u001b[31m13.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: regex>=2022.1.18 in /usr/local/lib/python3.10/dist-packages (from tiktoken) (2023.6.3)\n",
+            "Requirement already satisfied: requests>=2.26.0 in /usr/local/lib/python3.10/dist-packages (from tiktoken) (2.31.0)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests>=2.26.0->tiktoken) (3.3.0)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests>=2.26.0->tiktoken) (3.4)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests>=2.26.0->tiktoken) (2.0.6)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests>=2.26.0->tiktoken) (2023.7.22)\n",
+            "Installing collected packages: tiktoken\n",
+            "Successfully installed tiktoken-0.5.1\n",
+            "Collecting langchain\n",
+            "  Downloading langchain-0.0.309-py3-none-any.whl (1.8 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.8/1.8 MB\u001b[0m \u001b[31m13.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: PyYAML>=5.3 in /usr/local/lib/python3.10/dist-packages (from langchain) (6.0.1)\n",
+            "Requirement already satisfied: SQLAlchemy<3,>=1.4 in /usr/local/lib/python3.10/dist-packages (from langchain) (2.0.21)\n",
+            "Requirement already satisfied: aiohttp<4.0.0,>=3.8.3 in /usr/local/lib/python3.10/dist-packages (from langchain) (3.8.5)\n",
+            "Requirement already satisfied: anyio<4.0 in /usr/local/lib/python3.10/dist-packages (from langchain) (3.7.1)\n",
+            "Requirement already satisfied: async-timeout<5.0.0,>=4.0.0 in /usr/local/lib/python3.10/dist-packages (from langchain) (4.0.3)\n",
+            "Collecting dataclasses-json<0.7,>=0.5.7 (from langchain)\n",
+            "  Downloading dataclasses_json-0.6.1-py3-none-any.whl (27 kB)\n",
+            "Collecting jsonpatch<2.0,>=1.33 (from langchain)\n",
+            "  Downloading jsonpatch-1.33-py2.py3-none-any.whl (12 kB)\n",
+            "Collecting langsmith<0.1.0,>=0.0.40 (from langchain)\n",
+            "  Downloading langsmith-0.0.43-py3-none-any.whl (40 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m40.0/40.0 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: numpy<2,>=1 in /usr/local/lib/python3.10/dist-packages (from langchain) (1.23.5)\n",
+            "Requirement already satisfied: pydantic<3,>=1 in /usr/local/lib/python3.10/dist-packages (from langchain) (1.10.13)\n",
+            "Requirement already satisfied: requests<3,>=2 in /usr/local/lib/python3.10/dist-packages (from langchain) (2.31.0)\n",
+            "Requirement already satisfied: tenacity<9.0.0,>=8.1.0 in /usr/local/lib/python3.10/dist-packages (from langchain) (8.2.3)\n",
+            "Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (23.1.0)\n",
+            "Requirement already satisfied: charset-normalizer<4.0,>=2.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (3.3.0)\n",
+            "Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (6.0.4)\n",
+            "Requirement already satisfied: yarl<2.0,>=1.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (1.9.2)\n",
+            "Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (1.4.0)\n",
+            "Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.10/dist-packages (from aiohttp<4.0.0,>=3.8.3->langchain) (1.3.1)\n",
+            "Requirement already satisfied: idna>=2.8 in /usr/local/lib/python3.10/dist-packages (from anyio<4.0->langchain) (3.4)\n",
+            "Requirement already satisfied: sniffio>=1.1 in /usr/local/lib/python3.10/dist-packages (from anyio<4.0->langchain) (1.3.0)\n",
+            "Requirement already satisfied: exceptiongroup in /usr/local/lib/python3.10/dist-packages (from anyio<4.0->langchain) (1.1.3)\n",
+            "Collecting marshmallow<4.0.0,>=3.18.0 (from dataclasses-json<0.7,>=0.5.7->langchain)\n",
+            "  Downloading marshmallow-3.20.1-py3-none-any.whl (49 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m49.4/49.4 kB\u001b[0m \u001b[31m5.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting typing-inspect<1,>=0.4.0 (from dataclasses-json<0.7,>=0.5.7->langchain)\n",
+            "  Downloading typing_inspect-0.9.0-py3-none-any.whl (8.8 kB)\n",
+            "Collecting jsonpointer>=1.9 (from jsonpatch<2.0,>=1.33->langchain)\n",
+            "  Downloading jsonpointer-2.4-py2.py3-none-any.whl (7.8 kB)\n",
+            "Requirement already satisfied: typing-extensions>=4.2.0 in /usr/local/lib/python3.10/dist-packages (from pydantic<3,>=1->langchain) (4.5.0)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2->langchain) (2.0.6)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2->langchain) (2023.7.22)\n",
+            "Requirement already satisfied: greenlet!=0.4.17 in /usr/local/lib/python3.10/dist-packages (from SQLAlchemy<3,>=1.4->langchain) (3.0.0)\n",
+            "Requirement already satisfied: packaging>=17.0 in /usr/local/lib/python3.10/dist-packages (from marshmallow<4.0.0,>=3.18.0->dataclasses-json<0.7,>=0.5.7->langchain) (23.2)\n",
+            "Collecting mypy-extensions>=0.3.0 (from typing-inspect<1,>=0.4.0->dataclasses-json<0.7,>=0.5.7->langchain)\n",
+            "  Downloading mypy_extensions-1.0.0-py3-none-any.whl (4.7 kB)\n",
+            "Installing collected packages: mypy-extensions, marshmallow, jsonpointer, typing-inspect, langsmith, jsonpatch, dataclasses-json, langchain\n",
+            "Successfully installed dataclasses-json-0.6.1 jsonpatch-1.33 jsonpointer-2.4 langchain-0.0.309 langsmith-0.0.43 marshmallow-3.20.1 mypy-extensions-1.0.0 typing-inspect-0.9.0\n",
+            "Collecting faiss-cpu\n",
+            "  Downloading faiss_cpu-1.7.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.6 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m17.6/17.6 MB\u001b[0m \u001b[31m57.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: faiss-cpu\n",
+            "Successfully installed faiss-cpu-1.7.4\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install openai\n",
+        "!pip install tiktoken\n",
+        "!pip install langchain\n",
+        "!pip install faiss-cpu\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pip install pypdf"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "axo8YzRCrC2y",
+        "outputId": "5d8d3b96-f5d0-40d6-e25e-f1d9b735600f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting pypdf\n",
+            "  Downloading pypdf-3.16.2-py3-none-any.whl (276 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m276.3/276.3 kB\u001b[0m \u001b[31m3.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: pypdf\n",
+            "Successfully installed pypdf-3.16.2\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "TdfFb8GLaJvw"
+      },
+      "outputs": [],
+      "source": [
+        "import openai\n",
+        "import os\n",
+        "# Set up your OpenAI API key\n",
+        "os.environ[\"OPENAI_API_KEY\"]=\"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\"\n",
+        "from langchain.embeddings import OpenAIEmbeddings\n",
+        "from langchain.chains import LLMChain\n",
+        "from langchain.chains.question_answering import load_qa_chain\n",
+        "from langchain.chains import ConversationalRetrievalChain\n",
+        "from langchain.llms import OpenAI\n",
+        "from langchain.chat_models import ChatOpenAI\n",
+        "from langchain.prompts import SystemMessagePromptTemplate\n",
+        "from langchain import PromptTemplate\n",
+        "from langchain.memory import ConversationBufferMemory"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from langchain.document_loaders import PyPDFLoader\n",
+        "loader = PyPDFLoader('/content/train.pdf')\n",
+        "pages = loader.load_and_split()"
+      ],
+      "metadata": {
+        "id": "TqH1_hrgrWU1"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "uNNms66absNt"
+      },
+      "source": [
+        "## Chunking"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "T-wUjq_UbwKn"
+      },
+      "outputs": [],
+      "source": [
+        "from langchain.text_splitter import CharacterTextSplitter\n",
+        "text_splitter = CharacterTextSplitter(chunk_size=800, chunk_overlap=50)\n",
+        "documents = text_splitter.split_documents(pages)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "cwKXlW4cb0fr"
+      },
+      "outputs": [],
+      "source": [
+        "embeddings = OpenAIEmbeddings()\n",
+        "llm = ChatOpenAI(temperature=0, model='gpt-3.5-turbo')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "yzrdW0Ovb3EN",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 497
+        },
+        "outputId": "76c4a8d4-a2bc-4a5d-94bb-465e5caca62b"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "WARNING:langchain.embeddings.openai:Retrying langchain.embeddings.openai.embed_with_retry.<locals>._embed_with_retry in 4.0 seconds as it raised RateLimitError: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on tokens per min. Limit: 150000 / min. Current: 1 / min. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method..\n",
+            "WARNING:langchain.embeddings.openai:Retrying langchain.embeddings.openai.embed_with_retry.<locals>._embed_with_retry in 4.0 seconds as it raised RateLimitError: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on tokens per min. Limit: 150000 / min. Current: 0 / min. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method..\n",
+            "WARNING:langchain.embeddings.openai:Retrying langchain.embeddings.openai.embed_with_retry.<locals>._embed_with_retry in 4.0 seconds as it raised RateLimitError: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on tokens per min. Limit: 150000 / min. Current: 0 / min. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method..\n",
+            "WARNING:langchain.embeddings.openai:Retrying langchain.embeddings.openai.embed_with_retry.<locals>._embed_with_retry in 8.0 seconds as it raised RateLimitError: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on requests per min. Limit: 3 / min. Please try again in 20s. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method..\n",
+            "WARNING:langchain.embeddings.openai:Retrying langchain.embeddings.openai.embed_with_retry.<locals>._embed_with_retry in 10.0 seconds as it raised RateLimitError: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on tokens per min. Limit: 150000 / min. Current: 0 / min. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method..\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "RateLimitError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mRateLimitError\u001b[0m                            Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-23-6b91e70b87b5>\u001b[0m in \u001b[0;36m<cell line: 2>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mlangchain\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorstores\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mFAISS\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdb\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mFAISS\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfrom_documents\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdocuments\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0membeddings\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/schema/vectorstore.py\u001b[0m in \u001b[0;36mfrom_documents\u001b[0;34m(cls, documents, embedding, **kwargs)\u001b[0m\n\u001b[1;32m    420\u001b[0m         \u001b[0mtexts\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0md\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpage_content\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0md\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mdocuments\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    421\u001b[0m         \u001b[0mmetadatas\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0md\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmetadata\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0md\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mdocuments\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 422\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mcls\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfrom_texts\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtexts\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0membedding\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmetadatas\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mmetadatas\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    423\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    424\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mclassmethod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/vectorstores/faiss.py\u001b[0m in \u001b[0;36mfrom_texts\u001b[0;34m(cls, texts, embedding, metadatas, ids, **kwargs)\u001b[0m\n\u001b[1;32m    600\u001b[0m                 \u001b[0mfaiss\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mFAISS\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfrom_texts\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtexts\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0membeddings\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    601\u001b[0m         \"\"\"\n\u001b[0;32m--> 602\u001b[0;31m         \u001b[0membeddings\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0membedding\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0membed_documents\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtexts\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    603\u001b[0m         return cls.__from(\n\u001b[1;32m    604\u001b[0m             \u001b[0mtexts\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/embeddings/openai.py\u001b[0m in \u001b[0;36membed_documents\u001b[0;34m(self, texts, chunk_size)\u001b[0m\n\u001b[1;32m    488\u001b[0m         \u001b[0;31m# NOTE: to keep things simple, we assume the list may contain texts longer\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    489\u001b[0m         \u001b[0;31m#       than the maximum context and use length-safe embedding function.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 490\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_get_len_safe_embeddings\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtexts\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mengine\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdeployment\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    491\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    492\u001b[0m     async def aembed_documents(\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/embeddings/openai.py\u001b[0m in \u001b[0;36m_get_len_safe_embeddings\u001b[0;34m(self, texts, engine, chunk_size)\u001b[0m\n\u001b[1;32m    372\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    373\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0mi\u001b[0m \u001b[0;32min\u001b[0m \u001b[0m_iter\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 374\u001b[0;31m             response = embed_with_retry(\n\u001b[0m\u001b[1;32m    375\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    376\u001b[0m                 \u001b[0minput\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mtokens\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mi\u001b[0m \u001b[0;34m:\u001b[0m \u001b[0mi\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0m_chunk_size\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/embeddings/openai.py\u001b[0m in \u001b[0;36membed_with_retry\u001b[0;34m(embeddings, **kwargs)\u001b[0m\n\u001b[1;32m    105\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0m_check_response\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresponse\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mskip_empty\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0membeddings\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mskip_empty\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    106\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 107\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0m_embed_with_retry\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    108\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    109\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/tenacity/__init__.py\u001b[0m in \u001b[0;36mwrapped_f\u001b[0;34m(*args, **kw)\u001b[0m\n\u001b[1;32m    287\u001b[0m         \u001b[0;34m@\u001b[0m\u001b[0mfunctools\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwraps\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mf\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    288\u001b[0m         \u001b[0;32mdef\u001b[0m \u001b[0mwrapped_f\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkw\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 289\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mf\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkw\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    290\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    291\u001b[0m         \u001b[0;32mdef\u001b[0m \u001b[0mretry_with\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mWrappedFn\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/tenacity/__init__.py\u001b[0m in \u001b[0;36m__call__\u001b[0;34m(self, fn, *args, **kwargs)\u001b[0m\n\u001b[1;32m    377\u001b[0m         \u001b[0mretry_state\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mRetryCallState\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mretry_object\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfn\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mfn\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkwargs\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    378\u001b[0m         \u001b[0;32mwhile\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 379\u001b[0;31m             \u001b[0mdo\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0miter\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mretry_state\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mretry_state\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    380\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdo\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mDoAttempt\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    381\u001b[0m                 \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/tenacity/__init__.py\u001b[0m in \u001b[0;36miter\u001b[0;34m(self, retry_state)\u001b[0m\n\u001b[1;32m    323\u001b[0m             \u001b[0mretry_exc\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mretry_error_cls\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfut\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    324\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mreraise\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 325\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mretry_exc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mreraise\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    326\u001b[0m             \u001b[0;32mraise\u001b[0m \u001b[0mretry_exc\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mfut\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mexception\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    327\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/tenacity/__init__.py\u001b[0m in \u001b[0;36mreraise\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    156\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0mreraise\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mNoReturn\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    157\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlast_attempt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfailed\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 158\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlast_attempt\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    159\u001b[0m         \u001b[0;32mraise\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    160\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.10/concurrent/futures/_base.py\u001b[0m in \u001b[0;36mresult\u001b[0;34m(self, timeout)\u001b[0m\n\u001b[1;32m    449\u001b[0m                     \u001b[0;32mraise\u001b[0m \u001b[0mCancelledError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    450\u001b[0m                 \u001b[0;32melif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_state\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0mFINISHED\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 451\u001b[0;31m                     \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__get_result\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    452\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    453\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_condition\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwait\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtimeout\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.10/concurrent/futures/_base.py\u001b[0m in \u001b[0;36m__get_result\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    401\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_exception\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    402\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 403\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_exception\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    404\u001b[0m             \u001b[0;32mfinally\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    405\u001b[0m                 \u001b[0;31m# Break a reference cycle with the exception in self._exception\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/tenacity/__init__.py\u001b[0m in \u001b[0;36m__call__\u001b[0;34m(self, fn, *args, **kwargs)\u001b[0m\n\u001b[1;32m    380\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdo\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mDoAttempt\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    381\u001b[0m                 \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 382\u001b[0;31m                     \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mfn\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    383\u001b[0m                 \u001b[0;32mexcept\u001b[0m \u001b[0mBaseException\u001b[0m\u001b[0;34m:\u001b[0m  \u001b[0;31m# noqa: B902\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    384\u001b[0m                     \u001b[0mretry_state\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mset_exception\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msys\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mexc_info\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m  \u001b[0;31m# type: ignore[arg-type]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/langchain/embeddings/openai.py\u001b[0m in \u001b[0;36m_embed_with_retry\u001b[0;34m(**kwargs)\u001b[0m\n\u001b[1;32m    102\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mretry_decorator\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    103\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m_embed_with_retry\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mAny\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mAny\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 104\u001b[0;31m         \u001b[0mresponse\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0membeddings\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mclient\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcreate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    105\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0m_check_response\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresponse\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mskip_empty\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0membeddings\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mskip_empty\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    106\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/openai/api_resources/embedding.py\u001b[0m in \u001b[0;36mcreate\u001b[0;34m(cls, *args, **kwargs)\u001b[0m\n\u001b[1;32m     31\u001b[0m         \u001b[0;32mwhile\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     32\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 33\u001b[0;31m                 \u001b[0mresponse\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0msuper\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcreate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     34\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     35\u001b[0m                 \u001b[0;31m# If a user specifies base64, we'll just return the encoded string.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/openai/api_resources/abstract/engine_api_resource.py\u001b[0m in \u001b[0;36mcreate\u001b[0;34m(cls, api_key, api_base, api_type, request_id, api_version, organization, **params)\u001b[0m\n\u001b[1;32m    153\u001b[0m         )\n\u001b[1;32m    154\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 155\u001b[0;31m         response, _, api_key = requestor.request(\n\u001b[0m\u001b[1;32m    156\u001b[0m             \u001b[0;34m\"post\"\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    157\u001b[0m             \u001b[0murl\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/openai/api_requestor.py\u001b[0m in \u001b[0;36mrequest\u001b[0;34m(self, method, url, params, headers, files, stream, request_id, request_timeout)\u001b[0m\n\u001b[1;32m    297\u001b[0m             \u001b[0mrequest_timeout\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mrequest_timeout\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    298\u001b[0m         )\n\u001b[0;32m--> 299\u001b[0;31m         \u001b[0mresp\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mgot_stream\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_interpret_response\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstream\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    300\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mresp\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mgot_stream\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mapi_key\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    301\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/openai/api_requestor.py\u001b[0m in \u001b[0;36m_interpret_response\u001b[0;34m(self, result, stream)\u001b[0m\n\u001b[1;32m    708\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    709\u001b[0m             return (\n\u001b[0;32m--> 710\u001b[0;31m                 self._interpret_response_line(\n\u001b[0m\u001b[1;32m    711\u001b[0m                     \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcontent\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdecode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"utf-8\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    712\u001b[0m                     \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstatus_code\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/openai/api_requestor.py\u001b[0m in \u001b[0;36m_interpret_response_line\u001b[0;34m(self, rbody, rcode, rheaders, stream)\u001b[0m\n\u001b[1;32m    773\u001b[0m         \u001b[0mstream_error\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mstream\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0;34m\"error\"\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mresp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    774\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mstream_error\u001b[0m \u001b[0;32mor\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;36m200\u001b[0m \u001b[0;34m<=\u001b[0m \u001b[0mrcode\u001b[0m \u001b[0;34m<\u001b[0m \u001b[0;36m300\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 775\u001b[0;31m             raise self.handle_error_response(\n\u001b[0m\u001b[1;32m    776\u001b[0m                 \u001b[0mrbody\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrcode\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mresp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrheaders\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstream_error\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mstream_error\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    777\u001b[0m             )\n",
+            "\u001b[0;31mRateLimitError\u001b[0m: Rate limit reached for default-text-embedding-ada-002 in organization org-ULXmsdQeJNhfmmaob5TT5DyA on tokens per min. Limit: 150000 / min. Current: 0 / min. Contact us through our help center at help.openai.com if you continue to have issues. Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method."
+          ]
+        }
+      ],
+      "source": [
+        "from langchain.vectorstores import FAISS\n",
+        "db = FAISS.from_documents(documents, embeddings)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "sG0tBs_lb3UI"
+      },
+      "outputs": [],
+      "source": [
+        "from langchain.memory import ConversationBufferMemory\n",
+        "memory = ConversationBufferMemory(\n",
+        "    llm=llm,\n",
+        "    output_key='answer',\n",
+        "    memory_key='chat_history',\n",
+        "    return_messages=True)\n",
+        "\n",
+        "retriever = db.as_retriever(\n",
+        "    search_type=\"mmr\",\n",
+        "    search_kwargs={\"k\": 5, \"include_metadata\": True})\n",
+        "\n",
+        "prompt_template = \"\"\"\n",
+        "\n",
+        "Answer the questions like a chef who knows everything about cooking and in a helpful way.\n",
+        "Context: \\n {context}?\\n\n",
+        "question: \\n {question} \\n\n",
+        "\n",
+        "Answer:\n",
+        "\n",
+        "\"\"\"\n",
+        "from langchain.prompts import (\n",
+        "    ChatPromptTemplate,\n",
+        "    SystemMessagePromptTemplate,\n",
+        "    HumanMessagePromptTemplate,\n",
+        ")\n",
+        "\n",
+        "messages = [\n",
+        "            SystemMessagePromptTemplate.from_template(prompt_template),\n",
+        "]\n",
+        "\n",
+        "qa_prompt = ChatPromptTemplate.from_messages(messages)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "dcM75dRYcPGi"
+      },
+      "outputs": [],
+      "source": [
+        "chain = ConversationalRetrievalChain.from_llm(\n",
+        "  llm=llm,\n",
+        "  memory=memory,\n",
+        "  chain_type=\"stuff\",\n",
+        "  retriever=retriever,\n",
+        "  return_source_documents=True,\n",
+        "  get_chat_history=lambda h : h,\n",
+        "  combine_docs_chain_kwargs={'prompt': qa_prompt},\n",
+        "  verbose=False)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "y266rhAncWYL"
+      },
+      "outputs": [],
+      "source": [
+        "chat_history=[]"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "TN9xg0XRc8VQ"
+      },
+      "outputs": [],
+      "source": [
+        "query = \"Hi there, how are you?\"\n",
+        "result = chain({\"question\": query, \"chat_history\": chat_history})\n",
+        "result['answer']"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "anxlnYdpdC1v"
+      },
+      "outputs": [],
+      "source": [
+        "query = \"What are the main ingridients for indian dish?\"\n",
+        "result = chain({\"question\": query, \"chat_history\": chat_history})\n",
+        "result['answer']"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "7cIulf_7dMMK"
+      },
+      "source": [
+        "The OSI (Open Systems Interconnection) model consists of seven layers. These layers are:\n",
+        "\n",
+        "1. Physical Layer: This layer is responsible for the physical transmission of data over the network. It deals with the electrical, mechanical, and physical aspects of the network, such as cables, connectors, and network interface cards.\n",
+        "\n",
+        "2. Data Link Layer: This layer is responsible for the reliable transmission of data between two directly connected nodes. It provides error detection and correction, flow control, and access control to the network.\n",
+        "\n",
+        "3. Network Layer: This layer is responsible for the routing of data packets across different networks. It determines the best path for data transmission and handles addressing and logical network topology.\n",
+        "\n",
+        "4. Transport Layer: This layer is responsible for the end-to-end delivery of data. It ensures that data is transmitted reliably and in the correct order. It also provides error detection and recovery mechanisms.\n",
+        "\n",
+        "5. Session Layer: This layer establishes, manages, and terminates communication sessions between applications. It provides services such as session establishment, synchronization, and checkpointing.\n",
+        "\n",
+        "6. Presentation Layer: This layer is responsible for the formatting and presentation of data. It translates data from the application layer into a format that can be understood by the network.\n",
+        "\n",
+        "7. Application Layer: This layer provides services directly to the end-user applications. It includes protocols for email, file transfer, remote login, and other application-specific functions.\n",
+        "\n",
+        "These layers work together to ensure that data is transmitted reliably and efficiently across a network. Each layer has its own specific functions and protocols, and they interact with each other through well-defined interfaces."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "xo0Y9jQNdhL4"
+      },
+      "source": [
+        "Bus Topology:\n",
+        "- In a bus topology, all devices are connected to a single cable called the bus.\n",
+        "- Devices are connected to the bus using T-connectors.\n",
+        "- Data is transmitted in both directions on the bus.\n",
+        "- If a device wants to transmit data, it broadcasts the data on the bus and all devices receive it.\n",
+        "- Only one device can transmit data at a time, so collisions can occur if multiple devices try to transmit simultaneously.\n",
+        "- If the bus cable is damaged or disconnected, the entire network will be affected.\n",
+        "- Bus topologies are relatively simple and inexpensive to set up.\n",
+        "\n",
+        "Star Topology:\n",
+        "- In a star topology, all devices are connected to a central hub or switch.\n",
+        "- Each device has its own independent connection to the central hub/switch.\n",
+        "- Data is transmitted from one device to another through the central hub/switch.\n",
+        "- Only the intended recipient device receives the transmitted data.\n",
+        "- If a device wants to transmit data, it sends the data to the central hub/switch, which then forwards it to the appropriate recipient.\n",
+        "- If a device or cable is damaged or disconnected, only that device will be affected and the rest of the network will continue to function.\n",
+        "- Star topologies require more cable compared to bus topologies, as each device needs its own connection to the central hub/switch.\n",
+        "- Troubleshooting in a star topology is relatively simple, as the central hub/switch acts as the aggregation point for all connected devices."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "UgopJtj_acR3"
+      },
+      "source": [
+        "## Streamlit installation and imports"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "sF1ImTWOaTsi"
+      },
+      "outputs": [],
+      "source": [
+        "!pip install streamlit streamlit_chat\n",
+        "!npm install localtunnel"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "WQ6bQnZnakOx"
+      },
+      "outputs": [],
+      "source": [
+        "%%writefile app.py\n",
+        "\n",
+        "import streamlit as st\n",
+        "import openai\n",
+        "import os\n",
+        "# Set up your OpenAI API key\n",
+        "os.environ['OPENAI_API_KEY'] = 'OPENAI_KEY'\n",
+        "from langchain.embeddings import OpenAIEmbeddings\n",
+        "from langchain.chains import LLMChain\n",
+        "from langchain.chains.question_answering import load_qa_chain\n",
+        "from langchain.chains import ConversationalRetrievalChain\n",
+        "from langchain.llms import OpenAI\n",
+        "from langchain.chat_models import ChatOpenAI\n",
+        "from langchain.prompts import SystemMessagePromptTemplate\n",
+        "from langchain import PromptTemplate\n",
+        "from streamlit_chat import message\n",
+        "\n",
+        "st.set_page_config(page_title=\"Recipe Cook\", page_icon=\":smile:\")\n",
+        "\n",
+        "st.title('Welcome to dish cooking bot!')\n",
+        "\n",
+        "tab1= st.tabs([\"📈 Talk Here\"])\n",
+        "\n",
+        "# from langchain.document_loaders import TextLoader  #for textfiles\n",
+        "# loader = TextLoader('/content/train.pdf')\n",
+        "# documents = loader.load()\n",
+        "\n",
+        "from langchain.document_loaders import PyPDFLoader\n",
+        "loader = PyPDFLoader(\"/content/train.pdf\")\n",
+        "pages = loader.load_and_split()\n",
+        "\n",
+        "from langchain.text_splitter import CharacterTextSplitter\n",
+        "text_splitter = CharacterTextSplitter(chunk_size=800, chunk_overlap=50)\n",
+        "documents = text_splitter.split_documents(pages)\n",
+        "\n",
+        "embeddings = OpenAIEmbeddings()\n",
+        "llm = ChatOpenAI(temperature=0, model='gpt-3.5-turbo')\n",
+        "\n",
+        "from langchain.vectorstores import FAISS\n",
+        "db = FAISS.from_documents(documents, embeddings)\n",
+        "\n",
+        "from langchain.memory import ConversationBufferMemory\n",
+        "memory = ConversationBufferMemory(\n",
+        "    llm=llm,\n",
+        "    output_key='answer',\n",
+        "    memory_key='chat_history',\n",
+        "    return_messages=True)\n",
+        "\n",
+        "retriever = db.as_retriever(\n",
+        "    search_type=\"mmr\",\n",
+        "    search_kwargs={\"k\": 5, \"include_metadata\": True})\n",
+        "\n",
+        "prompt_template = \"\"\"\n",
+        "\n",
+        "Answer the questions like a teacher would in a systematic way.\n",
+        "If the query is outside this domain then do not answer it.\n",
+        "Context: \\n {context}?\\n\n",
+        "question: \\n {question} \\n\n",
+        "\n",
+        "Answer:\n",
+        "\n",
+        "\"\"\"\n",
+        "from langchain.prompts import (\n",
+        "    ChatPromptTemplate,\n",
+        "    SystemMessagePromptTemplate,\n",
+        "    HumanMessagePromptTemplate,\n",
+        ")\n",
+        "\n",
+        "messages = [\n",
+        "            SystemMessagePromptTemplate.from_template(prompt_template),\n",
+        "]\n",
+        "\n",
+        "qa_prompt = ChatPromptTemplate.from_messages(messages)\n",
+        "\n",
+        "chain = ConversationalRetrievalChain.from_llm(\n",
+        "  llm=llm,\n",
+        "  memory=memory,\n",
+        "  chain_type=\"stuff\",\n",
+        "  retriever=retriever,\n",
+        "  return_source_documents=True,\n",
+        "  get_chat_history=lambda h : h,\n",
+        "  combine_docs_chain_kwargs={'prompt': qa_prompt},\n",
+        "  verbose=False)\n",
+        "\n",
+        "if \"chat_history\" not in st.session_state:\n",
+        "    st.session_state[\"chat_history\"] = []\n",
+        "if \"generated\" not in st.session_state:\n",
+        "    st.session_state[\"generated\"] = [\"Hello ! Ask me anything about computer networks!\"]\n",
+        "if \"past\" not in st.session_state:\n",
+        "    st.session_state[\"past\"] = [\"Hey ! 👋\"]\n",
+        "\n",
+        "#container for the chat history\n",
+        "response_container = st.container()\n",
+        "#container for the user's text input\n",
+        "container = st.container()\n",
+        "\n",
+        "def generate_response(query):\n",
+        "    result = chain({\"question\": query, \"chat_history\": st.session_state[\"chat_history\"]})\n",
+        "    #st.write(result['answer'])\n",
+        "    st.session_state[\"chat_history\"] = [(query, result[\"answer\"])]\n",
+        "    with st.sidebar:\n",
+        "        st.write(result['source_documents'])\n",
+        "    return result[\"answer\"]\n",
+        "\n",
+        "with container:\n",
+        "  with st.form(key=\"my_form\", clear_on_submit=True):\n",
+        "      user_input = st.text_input(\"You:\", key=\"input\")\n",
+        "      submit_button = st.form_submit_button(label=\"Send\")\n",
+        "\n",
+        "      if user_input and submit_button:\n",
+        "        output = generate_response(user_input)\n",
+        "        #print(output)\n",
+        "        st.session_state[\"past\"].append(user_input)\n",
+        "        st.session_state[\"generated\"].append(output)\n",
+        "        st.session_state[\"chat_history\"] = [(user_input, output)]\n",
+        "\n",
+        "with response_container:\n",
+        "    for i in range(len(st.session_state['generated'])):\n",
+        "        message(st.session_state[\"past\"][i], is_user=True, key=str(i) + '_user', avatar_style=\"adventurer\")\n",
+        "        message(st.session_state[\"generated\"][i], key=str(i))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "2jLH4jbWdrR-"
+      },
+      "outputs": [],
+      "source": [
+        "!curl https://ipv4.icanhazip.com/"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "NWJi2GVXdwuo"
+      },
+      "outputs": [],
+      "source": [
+        "!streamlit run /content/app.py &>/content/logs.txt &"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "78tOEg6_dzZY"
+      },
+      "outputs": [],
+      "source": [
+        "!npx localtunnel --port 8501"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "huqIVPsed0sw"
+      },
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
